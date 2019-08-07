@@ -1,0 +1,12 @@
+- src:
+  - src
+  - tests
+  - app
+
+  extensions:
+  - OverloadedStrings
+  - NoImplicitPrelude
+  - TypeApplications
+  - DeriveGeneric
+  - DeriveAnyClass
+  - RecordWildCards
