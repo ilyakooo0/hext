@@ -12,6 +12,8 @@ Create a `.hext.yaml` file and put it into your project directory:
   - tests
   - app
 
+  line_limit: 100
+
   extensions:
   - OverloadedStrings
   - NoImplicitPrelude
@@ -19,6 +21,10 @@ Create a `.hext.yaml` file and put it into your project directory:
   - DeriveGeneric
   - DeriveAnyClass
   - RecordWildCards
+  - ScopedTypeVariables
+  - LambdaCase
 ```
 
 You can create multiple groups with different GHC extensions.
+
+`line_limit` can be abset, indicating that every extensions should be on its own line, a positive int or `none`, indicating that all extensions should be placed on one lines.

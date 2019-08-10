@@ -3,6 +3,8 @@
   - tests
   - app
 
+  line_limit: 100
+
   extensions:
   - OverloadedStrings
   - NoImplicitPrelude
@@ -10,3 +12,5 @@
   - DeriveGeneric
   - DeriveAnyClass
   - RecordWildCards
+  - ScopedTypeVariables
+  - LambdaCase

@@ -1,9 +1,5 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DeriveAnyClass #-}
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE OverloadedStrings, DeriveGeneric, TypeApplications, NoImplicitPrelude #-}
+{-# LANGUAGE DeriveAnyClass, LambdaCase, ScopedTypeVariables, RecordWildCards #-}
 
 module Data.Haskell.Parser
     ( withoutExtensions
@@ -16,7 +12,7 @@ import Text.Megaparsec
 import Text.Megaparsec.Char
 
 withoutExtensions :: Text -> Text
-withoutExtensions t = fromMaybe t $ flip (parseMaybe @()) t withoutExtensionsParser
+withoutExtensions t = fromMaybe t $ (parseMaybe @()) withoutExtensionsParser t
 
 withoutExtensionsParser :: (Ord e) => ParsecT e Text m Text
 withoutExtensionsParser = do

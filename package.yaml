@@ -24,8 +24,12 @@ dependencies:
 - megaparsec
 - relude
 - yaml
+- aeson
+- aeson-casing
 - optparse-applicative
 - directory-tree
+- scientific
+- text
 
 library:
   source-dirs: src

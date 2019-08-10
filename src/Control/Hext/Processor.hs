@@ -1,9 +1,5 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DeriveAnyClass #-}
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE OverloadedStrings, DeriveGeneric, TypeApplications, NoImplicitPrelude #-}
+{-# LANGUAGE DeriveAnyClass, LambdaCase, ScopedTypeVariables, RecordWildCards #-}
 
 module Control.Hext.Processor
     ( processFiles
@@ -11,9 +7,11 @@ module Control.Hext.Processor
 
 import Relude
 
-import Data.List hiding (unlines)
-import System.Directory.Tree
+import Control.Hext.Config
 import Data.Haskell.Parser
+import Data.List hiding (head, unlines)
+import qualified Data.Text as T
+import System.Directory.Tree
 
 getFiles :: FilePath -> IO [FilePath]
 getFiles dir = do
@@ -29,18 +27,40 @@ getFiles dir = do
         getHs (Dir name paths) | not $ "." `isPrefixOf` name = paths >>= getHs
         getHs _ = []
 
-processFile :: [Text] -> Text -> Text
-processFile extensions file =
-    (unlines . fmap wrapExtension) extensions
+processFile :: Maybe LineLimit -> Text -> Text -> Text
+processFile limit extensions file =
+    extensions
     <> "\n"
     <> withoutExtensions file
-        where
-            wrapExtension :: Text -> Text
-            wrapExtension e = "{-# LANGUAGE " <> e <> " #-}"
 
-processFiles :: [Text] -> FilePath -> IO ()
-processFiles extensions dir = do
+wrapExtension :: Text -> Text
+wrapExtension ee = "{-# LANGUAGE " <> ee <> " #-}"
+
+baseLength :: Int
+baseLength = T.length $ wrapExtension ""
+
+processFiles :: Maybe LineLimit -> [Text] -> FilePath -> IO ()
+processFiles limit extensions dir = do
     files <- getFiles dir
     forM_ files $ \file -> do
         contents <- readFileText file
-        writeFileText file . processFile extensions $ contents
+        writeFileText file . processFile limit (wrapExtensions extensions) $ contents
+    where
+        wrapExtensions :: [Text] -> Text
+        wrapExtensions [] = ""
+        wrapExtensions extensions@(e:ee) = case limit of
+            Nothing -> unlines . fmap wrapExtension $ extensions
+            Just Unlimited -> unlines . pure . wrapExtension . mconcat . intersperse ", " $ extensions
+            Just (Limited n) ->
+                let emptyExtra = ([], ee, baseLength + T.length e)
+                    ee' = unfoldr (\case
+                                        Nothing -> Nothing
+                                        (Just current@(_, [], _)) -> Just (current, Nothing)
+                                        (Just current@(soFar, ne:next, l)) ->
+                                            let thing = (ne:soFar, next, l + T.length ne + 2)
+                                            in Just (current, Just thing))
+                                (Just emptyExtra)
+                    (extraExtensions, eLeft, _) =
+                        fromMaybe emptyExtra . viaNonEmpty head . reverse . filter (\(_, _, n') -> n' <= n) $ ee'
+                in (wrapExtension . mconcat . intersperse ", " $ e:extraExtensions)
+                    <> "\n" <> wrapExtensions eLeft
