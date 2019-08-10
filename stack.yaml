@@ -64,3 +64,15 @@ packages:
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
+
+ghc-options:
+  "$locals":
+    -Wall
+    -Wincomplete-uni-patterns
+    -Wincomplete-record-updates
+    -Wmissing-exported-signatures
+    -Wmissing-home-modules
+    -Widentities
+    -Wmissed-specialisations
+    -Wall-missed-specialisations
+    -Wno-unused-do-bind

@@ -31,7 +31,7 @@ data LineLimit
 
 instance FromJSON LineLimit where
     parseJSON (A.Number n)
-        | Right n' <- floatingOrInteger n
+        | Right n' <- floatingOrInteger @Double n
         , n' > 0
         = return $ Limited n'
     parseJSON (A.String "none") = return Unlimited

@@ -6,7 +6,7 @@ module Data.Haskell.Parser
     , withoutExtensionsParser
     ) where
 
-import Relude hiding (some, many)
+import Relude hiding (many, some)
 
 import Text.Megaparsec
 import Text.Megaparsec.Char

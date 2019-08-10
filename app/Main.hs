@@ -8,8 +8,6 @@ import Relude
 import Control.Hext.Arguments
 import Control.Hext.Config
 import Control.Hext.Processor
-import Data.Haskell.Parser
-import Text.Megaparsec
 
 main :: IO ()
 main = do

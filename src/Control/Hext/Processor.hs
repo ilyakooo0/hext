@@ -27,8 +27,8 @@ getFiles dir = do
         getHs (Dir name paths) | not $ "." `isPrefixOf` name = paths >>= getHs
         getHs _ = []
 
-processFile :: Maybe LineLimit -> Text -> Text -> Text
-processFile limit extensions file =
+processFile :: Text -> Text -> Text
+processFile extensions file =
     extensions
     <> "\n"
     <> withoutExtensions file
@@ -40,11 +40,11 @@ baseLength :: Int
 baseLength = T.length $ wrapExtension ""
 
 processFiles :: Maybe LineLimit -> [Text] -> FilePath -> IO ()
-processFiles limit extensions dir = do
+processFiles limit allExtensions dir = do
     files <- getFiles dir
     forM_ files $ \file -> do
         contents <- readFileText file
-        writeFileText file . processFile limit (wrapExtensions extensions) $ contents
+        writeFileText file . processFile (wrapExtensions allExtensions) $ contents
     where
         wrapExtensions :: [Text] -> Text
         wrapExtensions [] = ""
