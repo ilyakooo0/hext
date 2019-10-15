@@ -1,5 +1,5 @@
-{-# LANGUAGE OverloadedStrings, DeriveGeneric, TypeApplications, NoImplicitPrelude #-}
-{-# LANGUAGE DeriveAnyClass, LambdaCase, ScopedTypeVariables, RecordWildCards #-}
+{-# LANGUAGE DeriveAnyClass, DeriveGeneric, LambdaCase, NoImplicitPrelude, OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards, ScopedTypeVariables, TypeApplications #-}
 
 module Data.Haskell.Parser
     ( withoutExtensions

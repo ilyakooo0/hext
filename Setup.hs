@@ -1,9 +1,5 @@
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE NoImplicitPrelude #-}
-{-# LANGUAGE TypeApplications #-}
-{-# LANGUAGE DeriveGeneric #-}
-{-# LANGUAGE DeriveAnyClass #-}
-{-# LANGUAGE RecordWildCards #-}
+{-# LANGUAGE DeriveAnyClass, DeriveGeneric, LambdaCase, NoImplicitPrelude, OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards, ScopedTypeVariables, TypeApplications #-}
 
 import Distribution.Simple
 main = defaultMain
